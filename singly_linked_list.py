@@ -32,61 +32,117 @@ class _Node:
 
 class SinglyLinkedList:
     """A linked list implementation of the List ADT.
-        """
+    """
     # === Private Attributes ===
     # The first node in this linked list, or None if this list is empty.
-    _first: Optional[_Node]
+    head: Optional[_Node]
 
-    def __init__(self):
-        """Initialize an empty linked list.
-        TODO: Initialize a new linked list containing the given items.
+    def __init__(self, nodes: list = None):
+        """Initialize an empty linked list. And if pass in an array of data,
+        then initialize a new linked list containing the given items.
         """
-        self._first = None
+        self.head = None
+
+        # if nodes not empty, initialize a linked list with n items
+        # (n = length of list of nodes)
+        if nodes is not None:
+            i = 0
+            n = len(nodes)
+            new_node = _Node(nodes[0])
+            self.head = new_node
+
+            for i in range(1, n):
+                new_node.next = _Node(nodes[i])
+                new_node = new_node.next
+
+    def __repr__(self):
+        results = self.to_list()
+        return " -> ".join(results)
 
     def print_items(self) -> None:
         """Print out each item in this linked list.
         """
 
-        _curr = self._first              # 1. Initialize curr to the start of the list
-        while _curr is not None:        # 2. curr is None if we've reached the end of the list.
-            print(_curr)                # 3. Do something with the current element
-            _curr = _curr.next          # 4. "Increment" curr, setting it to refer to the next node.
+        # 1. Initialize curr to the start of the list
+        # 2. curr is None if we've reached the end of the list.
+        # 3. Do something with the current element
+        # 4. "Increment" curr, setting it to refer to the next node.
+
+        curr = self.head
+        while curr is not None:
+            print(curr)
+            curr = curr.next
 
     def to_list(self) -> List[Any]:
         """Return a (built-in) list that contains the same elements as this list.
         """
 
-        _results = []
-        _curr = self._first
-        while _curr is not None:
-            _results.append(_curr.item)
-            _curr = _curr.next
+        results = []
+        curr = self.head
+        while curr is not None:
+            results.append(str(curr.item))
+            curr = curr.next
 
-        return _results
+        results.append("None")
+        return results
 
     def append(self, item: Any) -> None:
-        """TODO: Add the given item to the end of this linked list."""
-        pass
+        """Add the given item to the end of this linked list.
+
+        >>> _lst = SinglyLinkedList()
+        >>> _lst.append(2)
+        >>> str(_lst)
+        '2 -> None'
+
+        >>> _lst = SinglyLinkedList([1,2,3,4])
+        >>> _lst.append(100)
+        >>> str(_lst)
+        '1 -> 2 -> 3 -> 4 -> 100 -> None'
+
+        """
+
+        curr = self.head
+        new_node = _Node(item)
+
+        if curr is None:
+            self.head = new_node
+
+        else:
+
+            while curr.next is not None:
+                # traverse to last node in the linked list
+                curr = curr.next
+
+            # add a node after the last node
+            curr.next = new_node
 
     def insert(self, index: int, item: Any) -> None:
         """Insert a new node containing item at position <index>.
 
         Precondition: index >= 0.
 
-        Raise IndexError if index > len(self).
-
-        Note: if index == len(self), this method adds the item to the end
+        Note: if index >= len(self), this method adds the item to the end
         of the linked list, which is the same as LinkedList.append.
 
-        >>> _lst = SinglyLinkedList([1, 2, 10, 200])
-        >>> _lst.insert(2, 300)
-        >>> str(_lst)
-        '[1 -> 2 -> 300 -> 10 -> 200]'
-        >>> _lst.insert(5, -1)
-        >>> str(_lst)
-        '[1 -> 2 -> 300 -> 10 -> 200 -> -1]'
+        >>> lst = SinglyLinkedList([1, 2, 10, 200])
+        >>> lst.insert(2, 300)
+        >>> str(lst)
+        '1 -> 2 -> 300 -> 10 -> 200 -> None'
+        >>> lst.insert(5, -1)
+        >>> str(lst)
+        '1 -> 2 -> 300 -> 10 -> 200 -> -1 -> None'
         """
-        pass
+        i = 0
+        curr = self.head
+        new_node = _Node(item)
+
+        while (curr is not None) and (i < index - 1):
+            i += 1
+            curr = curr.next
+
+        # the expressions on the right side are all evaluated before any new values are assigned, meaning that you
+        # don’t need to worry about the order in which you write them
+        new_node.next, curr.next = curr.next, new_node
 
     def pop(self, index: int) -> Any:
         """Remove and return node at position <index>.
@@ -98,21 +154,45 @@ class SinglyLinkedList:
         >>> lst = SinglyLinkedList([1, 2, 10, 200])
         >>> lst.pop(2)
         10
+        >>> str(lst)
+        '1 -> 2 -> 200 -> None'
         >>> lst.pop(0)
         1
+        >>> str(lst)
+        '2 -> 200 -> None'
         """
+
+        i = 0
+        curr = self.head
+        prev = None
+
+        if curr is None:
+            # if the list is empty, then we raise Error since we cannot
+            # pop anything
+            raise IndexError
+
+        elif index == 0:
+            # head points to the next element in the linked list, and
+            # we return the current element (the prev head)
+            self.head = curr.next
+            return curr
+
+        else:
+            while i < index and curr is not None:
+                # we keep track of the previous element, and prev element points
+                # to the next element, thus the current element is no longer
+                # in the linked list, and we return the current.
+                # if [index] is out of bounds, then we always pop the last element in
+                # the linked list.
+                i += 1
+                prev = curr
+                curr = curr.next
+
+            prev.next = curr.next
+            return curr
 
 
 if __name__ == '__main__':
-    linky = SinglyLinkedList()          # linky is empty
-    node1 = _Node(10)
-    node2 = _Node(20)
-    node3 = _Node(30)
-    node1.next = node2
-    node2.next = node3
+    import doctest
 
-    linky._first = node1
-
-    linky.print_items()
-    lst = linky.to_list()
-    print(f'linky contains {lst}')
+    doctest.testmod()
