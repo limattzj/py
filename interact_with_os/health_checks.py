@@ -1,5 +1,6 @@
 import shutil
 import psutil
+from network import *
 
 
 def check_disk_usage(disk: str) -> bool:
@@ -35,6 +36,11 @@ def check_cpu_usage():
 
 
 if __name__ == "__main__":
-    result = check_disk_usage("/")
-    print(result)
+    if not check_disk_usage('/') or not check_cpu_usage():
+        print("ERROR!")
 
+    elif check_localhost() and check_connectivity():
+        print("Everything ok")
+
+    else:
+        print("Network checks failed")
