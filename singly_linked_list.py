@@ -23,6 +23,7 @@ class _Node:
     def __init__(self, item: Any) -> None:
         """Initialize a new node storing <item>, with no next node.
         """
+
         self.item = item
         self.next = None  # Initially pointing to nothing
 
@@ -33,13 +34,19 @@ class _Node:
 class SinglyLinkedList:
     """A linked list implementation of the List ADT.
     """
+
     # === Private Attributes ===
     # The first node in this linked list, or None if this list is empty.
     head: Optional[_Node]
 
     def __init__(self, nodes: list = None):
-        """Initialize an empty linked list. And if pass in an array of data,
-        then initialize a new linked list containing the given items.
+        """Initialize an empty linked list.
+
+        If pass in an array of data, then initialize a new linked list
+        containing the given items.
+
+        Args:
+            nodes: Optional list of elements
         """
         self.head = None
 
@@ -74,7 +81,10 @@ class SinglyLinkedList:
             curr = curr.next
 
     def to_list(self) -> List[Any]:
-        """Return a (built-in) list that contains the same elements as this list.
+        """A list representation of elements in linked list.
+
+        Returns:
+             a (built-in) list that contains the same elements in linked list.
         """
 
         results = []
@@ -87,16 +97,22 @@ class SinglyLinkedList:
         return results
 
     def append(self, item: Any) -> None:
-        """Add the given item to the end of this linked list.
+        """Append the given item to the end of this linked list.
 
-        >>> _lst = SinglyLinkedList()
-        >>> _lst.append(2)
-        >>> str(_lst)
-        '2 -> None'
+        Args:
+            item: the value to be appened at the end of linked list.
 
-        >>> _lst = SinglyLinkedList([1,2,3,4])
-        >>> _lst.append(100)
-        >>> str(_lst)
+        Returns:
+            None
+
+        >>> lst = SinglyLinkedList([1])
+        >>> lst.append(2)
+        >>> str(lst)
+        '1 -> 2 -> None'
+
+        >>> lst = SinglyLinkedList([1,2,3,4])
+        >>> lst.append(100)
+        >>> str(lst)
         '1 -> 2 -> 3 -> 4 -> 100 -> None'
 
         """
@@ -119,10 +135,14 @@ class SinglyLinkedList:
     def insert(self, index: int, item: Any) -> None:
         """Insert a new node containing item at position <index>.
 
-        Precondition: index >= 0.
+        If index >= len(self), the method adds the item to the end of the linked
+        list, which is the same as LinkedList.append() method
 
-        Note: if index >= len(self), this method adds the item to the end
-        of the linked list, which is the same as LinkedList.append.
+        Precondition:
+            - index >= 0.
+
+        Returns:
+            None.
 
         >>> lst = SinglyLinkedList([1, 2, 10, 200])
         >>> lst.insert(2, 300)
@@ -132,6 +152,7 @@ class SinglyLinkedList:
         >>> str(lst)
         '1 -> 2 -> 300 -> 10 -> 200 -> -1 -> None'
         """
+
         i = 0
         curr = self.head
         new_node = _Node(item)
@@ -140,16 +161,19 @@ class SinglyLinkedList:
             i += 1
             curr = curr.next
 
-        # the expressions on the right side are all evaluated before any new values are assigned, meaning that you
-        # don’t need to worry about the order in which you write them
+        # the expressions on the right side are all evaluated before any new
+        # values are assigned, meaning that you don’t need to worry about the
+        # order in which you write them
         new_node.next, curr.next = curr.next, new_node
 
     def pop(self, index: int) -> Any:
         """Remove and return node at position <index>.
 
-        Precondition: index >= 0.
+        Raises:
+             IndexError: Index is greater than length of the linked list.
 
-        Raise IndexError if index >= len(self).
+        Precondition:
+            - param: index >= 0
 
         >>> lst = SinglyLinkedList([1, 2, 10, 200])
         >>> lst.pop(2)
@@ -181,9 +205,8 @@ class SinglyLinkedList:
             while i < index and curr is not None:
                 # we keep track of the previous element, and prev element points
                 # to the next element, thus the current element is no longer
-                # in the linked list, and we return the current.
-                # if [index] is out of bounds, then we always pop the last element in
-                # the linked list.
+                # in the linked list, and we return the current. If [index] is
+                # out of bounds, then pop the last element in the linked list.
                 i += 1
                 prev = curr
                 curr = curr.next
