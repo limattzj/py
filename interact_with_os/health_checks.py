@@ -4,8 +4,7 @@ from network import *
 
 
 def check_disk_usage(disk: str) -> bool:
-    """
-    A function checks the percentage of free disk storage.
+    """A function checks the percentage of free disk storage.
 
     Args:
         disk: name of the disk, use '/' for root.
@@ -24,8 +23,7 @@ def check_disk_usage(disk: str) -> bool:
 
 
 def check_cpu_usage():
-    """
-    A function checks for cpu percent.
+    """A function checks for cpu percent.
 
     Returns:
         True if cpu usage is less than 75 percent and False otherwise
