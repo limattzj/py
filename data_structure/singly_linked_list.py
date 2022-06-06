@@ -53,7 +53,6 @@ class SinglyLinkedList:
         # if nodes not empty, initialize a linked list with n items
         # (n = length of list of nodes)
         if nodes is not None:
-            i = 0
             n = len(nodes)
             new_node = _Node(nodes[0])
             self.head = new_node
