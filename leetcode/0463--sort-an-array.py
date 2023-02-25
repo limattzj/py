@@ -12,7 +12,7 @@ class Solution:
 
         self.quickSort(A, 0, len(A) - 1)
 
-    def quickSort(self, nums, start, end):
+    def quickSort(self, A, start, end):
         """ QuickSort algorithm using a recursive approach.
 
         :param nums: List of integers to be sorted
@@ -21,29 +21,30 @@ class Solution:
 
         :return: None
         """
+        
         if start >= end:
             return
 
         left, right = start, end
-        pivot = nums[(start + end) // 2]
+        pivot = A[(start + end) // 2]
 
         while left <= right:
 
-            if nums[left] < pivot:
+            if A[left] < pivot:
                 left += 1
                 continue
 
-            if nums[right] > pivot:
+            if A[right] > pivot:
                 right -= 1
                 continue
 
-            nums[left], nums[right] = nums[right], nums[left]
-            print(nums)
+            A[left], A[right] = A[right], A[left]
+            print(A)
             left += 1
             right -= 1
 
-        self.quickSort(nums, start, right)
-        self.quickSort(nums, left, end)
+        self.quickSort(A, start, right)
+        self.quickSort(A, left, end)
 
 
 if __name__ == '__main__':
