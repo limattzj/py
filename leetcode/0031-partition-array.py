@@ -9,8 +9,8 @@ class Solution:
                 - All elements >= k are moved to the right
             
         Args:
-            - nums: The integer array you should partition
-            - k: The comparator as int
+            - nums: The integer array to be partitioned
+            - k: The comparator as int, note that k does not have to be in nums
 
         Returns:
             The first index i such that nums[i] >= k
@@ -21,23 +21,25 @@ class Solution:
             partition array as [1,2,2,3], and return 1 since nums[1] = 2
         """
 
-        A = nums
+        # if input array if empty
+        if not nums:
+            return 0
+
         left = 0
         right = len(nums) - 1
         
         while left <= right:
-            #如果 itemFromLeft 小于 k，放那儿不动
-            while left <= right and A[left] < k:
+            # 如果 itemFromLeft 小于 k，不动
+            while left <= right and nums[left] < k:
                 left += 1
             
-            #如果 itemFromRight 大于等于 k, 也放那儿不动
-            while left <= right and A[right] >= k:
+            # 如果 itemFromRight 大于等于 k, 不动
+            while left <= right and nums[right] >= k:
                 right -= 1
 
-            #如果 itermFromLeft 大于 k 或者 itemFromRight 大于k
-            #swap
+            # num[left] >= k or nums[right] < k, then swap
             if left <= right:
-                A[left], A[right] = A[right], A[left]
+                nums[left], nums[right] = nums[right], nums[left]
                 left += 1
                 right -= 1
         
