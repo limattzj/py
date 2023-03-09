@@ -45,37 +45,43 @@ class Solution:
         return result
 
 
-    def three_sum_hash(self, nums: List[int]) -> List[List[int]]:
+    def threeSum(self, nums: List[int]) -> List[List[int]]:
+        # Initialize a set to keep track of duplicate values
+        # and a dictionary to store the indices of previously seen values
+        duplicates = set()
+        seen_values = {}
 
-        # Initialize sets to store result triplets and duplicate values
-        # Initialize dictionary to store seen values and their indices
-        result, duplicates = set(), set()
-        seen = {}
-        
-        # Iterate through each value in the input array "nums"
+        # Initialize an empty list to store unique triplets that add up to 0
+        triplets = []
+
+        # Loop over each element in the array
         for i, x in enumerate(nums):
 
-            # Check if nums[i] has already been processed before
-            # If not, add it to the "dups" set to prevent duplicates
+            # Check if x is a duplicate
             if x not in duplicates:
                 duplicates.add(x)
-                
-                # Iterate through remaining values in "nums" 
-                # such that first + second + third = 0 => third = - first - second = -(first + second)
-                for _, y in enumerate(nums[i + 1: ]):
-                    z = -(x + y)
 
-                    # Check if the complement has been seen before and if it was seen for x
-                    if z in seen and seen[z] == i:
-                        
-                        # If so, add the triplet (x, y, complement) to result
-                        result.add(tuple(sorted((x, y, z))))
-                    
-                    # Update the "seen" dictionary with the current "y" and its index "i"
-                    seen[y] = i
-        
-        # Return the "res" set as a list of lists
-        return result
+                # Loop over the remaining elements in the array
+                for j, y in enumerate(nums[i+1:]):
+
+                    # Find the third element z such that z = -(x+y)
+                    z = -(x+y)
+
+                    # Check if we have seen z before at a previous index
+                    # If z was seen at the current i-th index, we have found a triplet
+                    if z in seen_values and seen_values[z] == i:
+
+                        triplet = sorted([x, y, z])
+
+                        # Check if the triplet is unique
+                        if triplet not in triplets:
+                            triplets.append(triplet)
+
+                    # Store the index of y in the seen_indices dictionary
+                    seen_values[y] = i
+
+        # Return the list of unique triplets that add up to 0
+        return triplets
 
 
 if __name__ == '__main__':

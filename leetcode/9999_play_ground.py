@@ -3,41 +3,36 @@ from typing import (
 )
 
 class Solution:
-    """
-    @param numbers: An array of Integer
-    @param target: target = numbers[index1] + numbers[index2]
-    @return: [index1, index2] (index1 < index2)
-    """
-    def two_sum(self, numbers: List[int], target: int) -> List[int]:
-        """Three approaches:
-        Brute-force: O(n^2)
-        two pointers: O(n*logn)
-        hashmap: O(n)
+    def sort_colors(self, nums):
+        self.partition_zeros(nums, 0, 0, len(nums) - 1)
+
+    def partition_zeros(self, nums, k, start, end):
+        """ Partition zeroes to the beginning of the array 
+
+        [1, 0, 2, 0, 2] -> [0, 0, 2, 2, 1] or something equivalent
         """
+        if start >= end:
+            return
+    
+        left = start
+        right = end
 
-        # list of tuple (number, index)
-        nums = [(number, index) for index, number in enumerate(numbers)]
-
-        # sort in O(n*logn), and old indices can still be accessed
-        nums = sorted(nums)
-
-        left = 0
-        right = len(nums) - 1
-
-        while left < right:
-            two_sum = nums[left][0] + nums[right][0]
-            if two_sum == target:
-                return sorted([nums[left][1], nums[right][1]])
-            elif two_sum > target:
-                right -= 1
-            else:
+        while left <= right:
+            while left <= right and nums[left] == k:
                 left += 1
-        
-        return [-1, -1]
-
+            
+            while left <= right and nums[right] > k:
+                right -= 1
+            
+            if left <= right:
+                nums[left], nums[right] = nums[right], nums[left]
+                left += 1
+                right -= 1
+            
+        self.partition_zeros(nums, k + 1, left, end)
         
 if __name__ == '__main__':
 
-    A = [15,2,7,11]
-    result = Solution().two_sum(A, 9)
-    print(result)
+    A = [1, 0, 2, 0, 2]
+    result = Solution().sort_colors(A)
+    print(A)
